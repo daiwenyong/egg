@@ -26,7 +26,6 @@ class UserService extends Service {
         const { ctx, app } = this;
         try {
             const result = await app.mysql.get(user, { name }); // mysql 实例已经挂载到 app 对象下，可以通过 app.mysql 获取到。
-            console.log("🚀 ~ file: user.js ~ line 29 ~ UserService ~ findUser ~ result", result)
             return result;
         } catch (error) {
             console.log(error);
@@ -37,7 +36,6 @@ class UserService extends Service {
         const { ctx, app } = this;
         try {
             const result = await app.mysql.insert(user, { name, psd }); // mysql 实例已经挂载到 app 对象下，可以通过 app.mysql 获取到。
-            console.log("🚀 ~ file: user.js ~ line 40 ~ UserService ~ addUser ~ result", result)
             return result;
         } catch (error) {
             console.log(error);

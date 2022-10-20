@@ -88,7 +88,7 @@ class UserController extends Controller {
 
       const token = app.jwt.sign({
         id: find.id,
-        username: find.name,
+        name: find.name,
         // exp:Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 有效期24小时
       }, app.config.jwt.secret, {
         expiresIn: '2h'
@@ -100,17 +100,19 @@ class UserController extends Controller {
   }
 
   async getUserInfo() {
+    
     const { ctx, app } = this;
     // 通过 token 解析，拿到 user_id
     const token = ctx.request.header.authorization; // 请求头获取 authorization 属性，值为 token
     // 通过 app.jwt.verify + 加密字符串 解析出 token 的值 
     const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    const {psd,...res} = await this.findUser(decode.name)
     // 响应接口
     ctx.body = {
       code: 200,
       message: '获取成功',
       data: {
-        ...decode
+        ...res
       }
     }
   }
