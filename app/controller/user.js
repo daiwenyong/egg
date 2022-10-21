@@ -46,7 +46,7 @@ class UserController extends Controller {
       this.error('请求失败', null)
     }
   }
-  async updateUser() {
+  async updateUser2() {
     const { ctx } = this;
     const { name, id } = ctx.request.body;
     const res = await this.findUser(name)
@@ -116,6 +116,37 @@ class UserController extends Controller {
       }
     }
   }
+
+  // 修改用户信息
+async updateUser () {
+  const { ctx, app } = this;
+  // 通过 post 请求，在请求体中获取签名字段 signature
+  const postData = ctx.request.body
+
+  try {
+    // let user_id
+    const token = ctx.request.header.authorization;
+    // 解密 token 中的用户名称
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    if (!decode) return
+    // user_id = decode.id
+    const userInfo = await this.findUser(decode.name)
+    const result = await ctx.service.user.updateUser({
+      ...userInfo,
+      ...postData
+    });
+
+    ctx.body = {
+      code: 200,
+      msg: '请求成功',
+      data: {
+        ...result
+      }
+    }
+  } catch (error) {
+    
+  }
+}
 
 }
 

@@ -8,12 +8,13 @@ class UserService extends Service {
         });
     }
 
-    async updateUser(name, id) {
+    // todo 如果多传字段如何处理
+    async updateUser(params) {
         const { app } = this;
         try {
-            const result = await app.mysql.update(user, { name, id }); // mysql 实例已经挂载到 app 对象下，可以通过 app.mysql 获取到。
+            const result = await app.mysql.update(user, {...params},{ id:params.id }); // mysql 实例已经挂载到 app 对象下，可以通过 app.mysql 获取到。
             if (result.affectedRows === 1) {
-                return result;
+                return params;
             } else {
                 return null
             }
